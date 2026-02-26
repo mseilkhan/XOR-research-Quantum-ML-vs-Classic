@@ -6,6 +6,14 @@ The repository is structured to allow reproducible execution of all simulator-ba
 
 IBM Quantum hardware experiments described in the manuscript are not included in this public artifact.
 
+## Authors
+
+**Miras Seilkhan**  
+Email: seilkhan.miras6117@gmail.com  
+
+**Adilbek Taizhanov**  
+Email: adilbek300108@gmail.com  
+
 ---
 
 ## 1. Environment Setup
