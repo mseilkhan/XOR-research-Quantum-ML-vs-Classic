@@ -1,0 +1,32 @@
+{
+  "paper": {
+    "title": "Comparing Classical and Quantum Variational Classifiers on the XOR Problem",
+    "scope": "Smoke-level artifacts for CI (tiny runs)."
+  },
+  "artifacts": [
+    {
+      "id": "SmokeExp01",
+      "paper_ref": "smoke",
+      "description": "Decision boundary images exist (smoke).",
+      "script": "XOR_SMOKE=1 python -m experiments.exp_01_decision_boundaries",
+      "expected_outputs": [
+        "outputs/figures/db_mlp_h4_datasetA.png"
+      ],
+      "raw_csv": [
+        "outputs/csv/exp01_decision_boundaries_raw_metrics.csv"
+      ]
+    },
+    {
+      "id": "SmokeExp06",
+      "paper_ref": "smoke",
+      "description": "Benchmark tables exist (smoke).",
+      "script": "XOR_SMOKE=1 python -m experiments.exp_06_summary_tables",
+      "expected_outputs": [
+        "outputs/csv/summary_benchmark_runs.csv"
+      ],
+      "raw_csv": [
+        "outputs/csv/summary_benchmark_runs.csv"
+      ]
+    }
+  ]
+}

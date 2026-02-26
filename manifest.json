@@ -1,0 +1,109 @@
+{
+  "paper": {
+    "title": "Comparing Classical and Quantum Variational Classifiers on the XOR Problem",
+    "scope": "Main-body figures and tables implemented in this repository (exp_01..exp_06)."
+  },
+  "artifacts": [
+    {
+      "id": "Fig6",
+      "paper_ref": "Figure 6",
+      "description": "Decision boundaries (MLP) on Dataset A and Dataset B (sigma sweep used for visualization).",
+      "script": "python -m experiments.exp_01_decision_boundaries",
+      "expected_outputs": [
+        "outputs/figures/db_mlp_h4_datasetA.png",
+        "outputs/figures/db_mlp_h4_datasetB_*.png"
+      ],
+      "raw_csv": [
+        "outputs/csv/exp01_decision_boundaries_raw_metrics.csv"
+      ]
+    },
+    {
+      "id": "Fig7",
+      "paper_ref": "Figure 7",
+      "description": "Decision boundaries (VQC) for L=1/2 and shots regimes.",
+      "script": "python -m experiments.exp_01_decision_boundaries",
+      "expected_outputs": [
+        "outputs/figures/db_vqc_L1_*.png",
+        "outputs/figures/db_vqc_L2_*.png"
+      ],
+      "raw_csv": [
+        "outputs/csv/exp01_decision_boundaries_raw_metrics.csv"
+      ]
+    },
+    {
+      "id": "Fig8",
+      "paper_ref": "Figure 8",
+      "description": "Learning curves (MLP and VQC).",
+      "script": "python -m experiments.exp_02_learning_behavior",
+      "expected_outputs": [
+        "outputs/figures/lc_mlp_h4_loss.png",
+        "outputs/figures/lc_mlp_h4_acc.png",
+        "outputs/figures/lc_mlp_h4_testloss_seeds.png",
+        "outputs/figures/lc_vqc_L1_*_loss.png",
+        "outputs/figures/lc_vqc_L2_analytic_testloss_seeds.png"
+      ],
+      "raw_csv": [
+        "outputs/csv/exp02_learning_behavior_raw_history.csv"
+      ]
+    },
+    {
+      "id": "Fig9ab",
+      "paper_ref": "Figure 9a, 9b",
+      "description": "Robustness vs noise sigma and vs dataset size on Dataset B.",
+      "script": "python -m experiments.exp_03_robustness_datasetB",
+      "expected_outputs": [
+        "outputs/figures/fig9*.png",
+        "outputs/csv/robustness_noise_runs.csv",
+        "outputs/csv/robustness_noise_summary.csv",
+        "outputs/csv/robustness_size_runs.csv",
+        "outputs/csv/robustness_size_summary.csv"
+      ],
+      "raw_csv": [
+        "outputs/csv/robustness_noise_runs.csv",
+        "outputs/csv/robustness_size_runs.csv"
+      ]
+    },
+    {
+      "id": "Fig9c",
+      "paper_ref": "Figure 9c",
+      "description": "VQC performance vs shots.",
+      "script": "python -m experiments.exp_04_vqc_shots_dependence",
+      "expected_outputs": [
+        "outputs/figures/fig9c*.png",
+        "outputs/csv/vqc_shots_runs.csv",
+        "outputs/csv/vqc_shots_summary.csv"
+      ],
+      "raw_csv": [
+        "outputs/csv/vqc_shots_runs.csv"
+      ]
+    },
+    {
+      "id": "Fig10",
+      "paper_ref": "Figure 10",
+      "description": "Seed sensitivity experiment.",
+      "script": "python -m experiments.exp_05_seed_sensitivity",
+      "expected_outputs": [
+        "outputs/figures/fig10*.png",
+        "outputs/csv/seed_sensitivity_runs.csv"
+      ],
+      "raw_csv": [
+        "outputs/csv/seed_sensitivity_runs.csv"
+      ]
+    },
+    {
+      "id": "Table45",
+      "paper_ref": "Table 4, Table 5",
+      "description": "Benchmark summary tables and raw runs.",
+      "script": "python -m experiments.exp_06_summary_tables",
+      "expected_outputs": [
+        "outputs/tables/table4.csv",
+        "outputs/tables/table5.csv",
+        "outputs/csv/summary_benchmark_runs.csv",
+        "outputs/csv/summary_benchmark_meanstd.csv"
+      ],
+      "raw_csv": [
+        "outputs/csv/summary_benchmark_runs.csv"
+      ]
+    }
+  ]
+}

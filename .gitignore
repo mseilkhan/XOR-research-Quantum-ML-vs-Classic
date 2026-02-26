@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Virtual env
+.venv/
+env/
+
+# OS files
+.DS_Store
+__MACOSX/
+
+# IDE
+.idea/
+.vscode/
+
+# Outputs
+outputs/
+
+# Pytest
+.pytest_cache/
