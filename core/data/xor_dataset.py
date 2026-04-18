@@ -60,13 +60,18 @@ def make_dataset_B(
                         [1.0, 1.0]], dtype=float)
 
     X_list = []
+    y_list = []
     for c in corners:
         Xc = c[None, :] + rng.normal(loc=0.0, scale=float(sigma), size=(int(n_per_cluster), 2))
         X_list.append(Xc)
 
+        cluster_label = xor_labels(c[None, :])[0]
+
+        y_list.append(np.full(int(n_per_cluster), cluster_label))
+
     X = np.vstack(X_list).astype(float)
-    # labels by XOR of cluster identity (using corner rounding)
-    y = xor_labels(X.clip(0.0, 1.0))  # clip just for stable rounding under noise
+    y = np.concatenate(y_list).astype(float)
+
     return X, y
 
 

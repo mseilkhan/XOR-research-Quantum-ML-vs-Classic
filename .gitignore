@@ -16,7 +16,8 @@ __MACOSX/
 .vscode/
 
 # Outputs
-outputs/
+outputs/*
+!myfolder/.gitkeep
 
 # Pytest
 .pytest_cache/

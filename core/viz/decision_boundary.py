@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from core.viz.style import apply_plot_style
-
+from pathlib import Path
 
 def _is_vqc_model(model) -> bool:
     name = getattr(model, "name", "")
@@ -98,6 +98,7 @@ def plot_decision_function(
         plt.colorbar(im, ax=ax, fraction=0.046, pad=0.04)
 
     if out_path is not None:
+        Path(out_path).parent.mkdir(parents=True, exist_ok=True)
         fig.savefig(out_path, bbox_inches="tight", facecolor="white", edgecolor="white", transparent=False)
     plt.close(fig)
 
