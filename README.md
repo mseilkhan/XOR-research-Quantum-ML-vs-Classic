@@ -163,3 +163,6 @@ export MPLBACKEND=Agg
 python -m experiments.run_all
 ```
 
+
+This repository is tested with Python 3.13. The pinned dependency versions in
+`requirements.txt` should be installed in a Python 3.13 environment.
