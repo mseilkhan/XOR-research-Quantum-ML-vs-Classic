@@ -68,50 +68,79 @@ python -m experiments.exp_08_loss_landscape_slices
 python -m experiments.exp_09_datasetC_study
 ```
 
-### 2.3 Optional smoke mode
+### 2.3 Smoke / CI checks
 
-If smoke mode is supported via environment variable:
+The repository includes reduced smoke checks for the core decision-boundary
+and benchmark pipelines. These checks validate code paths only and must not be
+used as manuscript results.
 
-macOS / Linux:
-
-```bash
-XOR_SMOKE=1 python -m experiments.run_all
-```
-
-Windows PowerShell:
+Run:
 
 ```bash
-$env:XOR_SMOKE="1"
-python -m experiments.run_all
+pytest -q
 ```
+
+The smoke tests execute reduced versions of Experiments 1 and 6 and validate
+their outputs using `manifest_smoke.json`
 
 ---
 
 ## 3. Output Structure
 
-All experiment outputs are written to the `outputs/` directory (created automatically if absent):
+Full experimental runs and smoke/CI runs use separate output roots so that
+reduced sanity checks cannot overwrite publication-run artifacts.
 
-```
+A standard run writes to:
+
+```text
 outputs/
-  figures/     # Generated figures (PNG)
-  csv/         # Raw and aggregated results
-  logs/        # Execution logs
-  metadata/    # Run metadata
+  figures/
+  csv/
+  tables/
+  logs/
 ```
 
-If directories are missing, they can be created manually:
+A smoke run invoked with `XOR_SMOKE=1` writes instead to:
+
+```text
+outputs_smoke/
+  figures/
+  csv/
+  tables/
+  logs/
+```
+
+Files produced in smoke mode are intended only for code-path validation and
+**must not be used as numerical results for the manuscript**.
+---
+## 4. Reproducibility Scope and Experimental Protocol
+
+The simulator-based experimental protocol is centralized in
+`experiments/settings.py`. This file defines the dataset and split seeds,
+training horizons, learning rates, optimizer, model-seed sets, architecture
+grids, and VQC shot settings used by the experiment scripts.
+
+An experiment-level protocol table can be generated directly from these
+settings with:
 
 ```bash
-mkdir -p outputs/figures outputs/csv outputs/logs outputs/metadata
+python tools/export_protocol.py
 ```
 
----
+The command writes the following files:
 
-## 4. Reproducibility Scope
+- `paper/experiment_protocol.csv`
+- `paper/experiment_protocol_rows.tex`
 
-This public repository reproduces all classical and simulator-based quantum experiments presented in the main body of the paper.
+The fixed Dataset-B benchmark reported in the manuscript is treated separately
+from transient experiment outputs. Its publication-level aggregate values are
+stored in `paper/canonical_benchmark.csv`. This file records the frozen
+five-seed benchmark used for the manuscript tables and quantitative claims;
+smoke-run outputs are never authoritative publication results.
 
-Hardware executions performed on IBM Quantum devices are reported in the manuscript for completeness but are not included in this artifact.
+The public repository implements the classical and simulator-based quantum experiments described in the manuscript.
+
+IBM Quantum hardware executions are reported separately in the manuscript and are not included in this public artifact.
 
 ---
 

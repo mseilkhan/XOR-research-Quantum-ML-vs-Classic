@@ -10,10 +10,10 @@
       "description": "Decision boundary images exist (smoke).",
       "script": "XOR_SMOKE=1 python -m experiments.exp_01_decision_boundaries",
       "expected_outputs": [
-        "outputs/figures/db_mlp_h4_datasetA.png"
+        "outputs_smoke/figures/db_mlp_h4_datasetA.png"
       ],
       "raw_csv": [
-        "outputs/csv/exp01_decision_boundaries_raw_metrics.csv"
+        "outputs_smoke/csv/exp01_decision_boundaries_raw_metrics.csv"
       ]
     },
     {
@@ -22,10 +22,10 @@
       "description": "Benchmark tables exist (smoke).",
       "script": "XOR_SMOKE=1 python -m experiments.exp_06_summary_tables",
       "expected_outputs": [
-        "outputs/csv/summary_benchmark_runs.csv"
+        "outputs_smoke/csv/summary_benchmark_runs.csv"
       ],
       "raw_csv": [
-        "outputs/csv/summary_benchmark_runs.csv"
+        "outputs_smoke/csv/summary_benchmark_runs.csv"
       ]
     }
   ]

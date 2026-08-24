@@ -21,6 +21,10 @@ jobs:
           pip install -r requirements.txt
           pip install pytest
 
+      - name: Compile Python sources
+        run: |
+          python -m compileall -q core experiments tools tests
+
       - name: Pytest
         run: |
           pytest -q

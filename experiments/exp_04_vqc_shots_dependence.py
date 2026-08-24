@@ -79,7 +79,14 @@ def main():
             split=split,
             dataset_name="B",
             model_name=spec.name,
-            train_cfg=TrainConfig(VQC_HP.epochs, VQC_HP.lr),
+            train_cfg=TrainConfig(
+                epochs=VQC_HP.epochs,
+                lr=VQC_HP.lr,
+                optimizer=OPTIMIZER,
+                adam_beta1=ADAM_BETA1,
+                adam_beta2=ADAM_BETA2,
+                adam_eps=ADAM_EPS,
+            ),
             model_seeds=MODEL_SEEDS,
             meta={"sigma": 0.10, "n_per_cluster": 100, "shots": shots, "L": 1},
         )

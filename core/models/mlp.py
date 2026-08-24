@@ -10,11 +10,12 @@ from core.optim.adam import adam_init, adam_step
 
 class MLP1Hidden(BaseBinaryClassifier):
     """
-    MLP with 1 hidden layer:
-    - hidden: sigmoid
-    - output: sigmoid
-    Train: full-batch SGD (per epoch), fixed epochs across experiments.
-    Hidden units h in {1,2,4,8} (ablation).
+    One-hidden-layer MLP with sigmoid hidden and output activations.
+
+    Training uses the optimizer and hyperparameters supplied by TrainConfig.
+    The publication protocol uses full-batch gradient descent; the main
+    baseline width and width-ablation grid are defined centrally in
+    experiments.settings.
     """
 
     def __init__(self, model_seed: int, h: int):
