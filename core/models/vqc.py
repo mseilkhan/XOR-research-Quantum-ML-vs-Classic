@@ -75,7 +75,7 @@ class VQC2Q(BaseBinaryClassifier):
         return int(self.params.size)
 
     def _decision_f(self, X: np.ndarray) -> np.ndarray:
-        """Return f(x)=<Z> in [-1,1]."""
+        """Return m(x)=<Z0> in [-1,1]."""
         theta = self.pnp.array(self.params, requires_grad=False)
         out = []
         for x in X:

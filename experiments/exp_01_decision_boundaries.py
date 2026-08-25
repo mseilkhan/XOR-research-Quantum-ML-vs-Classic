@@ -12,6 +12,8 @@ Artifacts:
 import os
 from typing import Any, Dict, List, Optional
 
+import numpy as np
+
 from core.data.xor_dataset import make_split
 from core.data.xor_dataset import DatasetSplit, make_dataset_A
 from core.train.trainer import TrainConfig, Trainer
@@ -276,42 +278,127 @@ def main():
 
     # ---------- VQC decision boundaries ----------
     # Representative benchmark dataset
-    split_rep = make_split("B", sigma=0.10, n_per_cluster=100, data_seed=DATASET_SEED, split_seed=SPLIT_SEED)
+    split_rep = make_split(
+        "B",
+        sigma=0.10,
+        n_per_cluster=100,
+        data_seed=DATASET_SEED,
+        split_seed=SPLIT_SEED,
+    )
+
+    vqc_train_cfg = TrainConfig(
+        epochs=VQC_HP.epochs,
+        lr=VQC_HP.lr,
+        optimizer=OPTIMIZER,
+        adam_beta1=ADAM_BETA1,
+        adam_beta2=ADAM_BETA2,
+        adam_eps=ADAM_EPS,
+    )
 
     for L in tqdm([1, 2], desc="VQC depth L"):
-        for shots in tqdm([None, 1024], desc=f"VQC(L={L}) shots", leave=False):
-            vqc_spec, vqc_factory = make_vqc(L=L, shots=shots)
-            vqc_models = train_models_across_seeds(
-                model_factory=vqc_factory,
-                split=split_rep,
-                train_cfg=TrainConfig(VQC_HP.epochs,
-                                      VQC_HP.lr,
-                                      optimizer=OPTIMIZER,
-                                      adam_beta1=ADAM_BETA1,
-                                      adam_beta2=ADAM_BETA2,
-                                      adam_eps=ADAM_EPS,
-                                      ),
-                dataset_label="B",
-                sigma=0.10,
-                n_per_cluster=100,
-                model_label=vqc_spec.name,
-                shots=shots,
-                L=L,
-                raw_rows=raw_rows,
+        # ---------------------------------------------------------
+        # 1. Train once in the analytic regime.
+        # ---------------------------------------------------------
+        analytic_spec, analytic_factory = make_vqc(
+            L=L,
+            shots=None,
+        )
+
+        analytic_models = train_models_across_seeds(
+            model_factory=analytic_factory,
+            split=split_rep,
+            train_cfg=vqc_train_cfg,
+            dataset_label="B",
+            sigma=0.10,
+            n_per_cluster=100,
+            model_label=analytic_spec.name,
+            shots=None,
+            L=L,
+            raw_rows=raw_rows,
+        )
+
+        analytic_out = os.path.join(
+            FIG_DIR,
+            f"db_vqc_L{L}_{tag_shots(None)}.png",
+        )
+
+        plot_decision_boundary_seed_background(
+            models=analytic_models,
+            X=split_rep.X_train,
+            y=split_rep.y_train,
+            title=(
+                f"{analytic_spec.name} — "
+                "Dataset B (σ=0.10, n=100)"
+            ),
+            out_path=analytic_out,
+            xlim=(0, 1),
+            ylim=(0, 1),
+        )
+
+        # ---------------------------------------------------------
+        # 2. Evaluate exactly the same optimized parameter vectors
+        #    with 1024 finite shots. No second optimization is run.
+        # ---------------------------------------------------------
+        finite_spec, finite_factory = make_vqc(
+            L=L,
+            shots=1024,
+        )
+
+        finite_models = []
+
+        for seed, analytic_model in zip(
+            MODEL_SEEDS,
+            analytic_models,
+        ):
+            finite_model = finite_factory(int(seed))
+
+            finite_model.params = np.array(
+                analytic_model.params,
+                dtype=float,
+            ).copy()
+
+            finite_metrics = Trainer.final_metrics(
+                finite_model,
+                split_rep.X_train,
+                split_rep.y_train,
+                split_rep.X_test,
+                split_rep.y_test,
             )
 
-            out_path = os.path.join(FIG_DIR, f"db_vqc_L{L}_{tag_shots(shots)}.png")
-            plot_decision_boundary_seed_background(
-                models=vqc_models,
-                X=split_rep.X_train,
-                y=split_rep.y_train,
-                title=f"{vqc_spec.name} — Dataset B (σ=0.10, n=100)",
-                out_path=out_path,
-                xlim=(0, 1),
-                ylim=(0, 1),
+            raw_rows.append(
+                _final_metrics_row(
+                    dataset="B",
+                    model=finite_spec.name,
+                    seed=int(seed),
+                    sigma=0.10,
+                    n_per_cluster=100,
+                    shots=1024,
+                    L=L,
+                    metrics=finite_metrics,
+                    n_params=finite_model.n_params(),
+                )
             )
 
-    # ----- Fix 12 artifact: raw per-seed final metrics -----
+            finite_models.append(finite_model)
+
+        finite_out = os.path.join(
+            FIG_DIR,
+            f"db_vqc_L{L}_{tag_shots(1024)}.png",
+        )
+
+        plot_decision_boundary_seed_background(
+            models=finite_models,
+            X=split_rep.X_train,
+            y=split_rep.y_train,
+            title=(
+                f"{finite_spec.name} — "
+                "Dataset B (σ=0.10, n=100)"
+            ),
+            out_path=finite_out,
+            xlim=(0, 1),
+            ylim=(0, 1),
+        )
+
     save_records_csv(RAW_METRICS_CSV, raw_rows)
 
 

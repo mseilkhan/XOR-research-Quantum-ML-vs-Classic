@@ -39,10 +39,15 @@ from experiments.settings import (
     SPLIT_SEED,
     BENCH_SIGMA,
     BENCH_N,
+    LR_HP,
     MLP_HP,
     VQC_HP,
     CSV_DIR,
     FIG_DIR,
+    OPTIMIZER,
+    ADAM_BETA1,
+    ADAM_BETA2,
+    ADAM_EPS,
 )
 
 # Optional integrations (Fix 13/14)
@@ -297,7 +302,6 @@ def main():
 
     cfg = LandscapeConfig()
 
-    # Dataset B benchmark split
     split = make_split(
         "B",
         sigma=float(BENCH_SIGMA),
@@ -306,24 +310,81 @@ def main():
         split_seed=int(SPLIT_SEED),
     )
 
-    # Model suite (fast)
     linear_spec, linear_factory = make_linear()
     mlp_spec, mlp_factory = make_mlp(h=4)
-    vqc_spec, vqc_factory = make_vqc(L=1, shots=None)  # analytic only
 
-    # Train configs
+    vqc1_spec, vqc1_factory = make_vqc(
+        L=1,
+        shots=None,
+    )
+
+    vqc2_spec, vqc2_factory = make_vqc(
+        L=2,
+        shots=None,
+    )
+
     linear_cfg = TrainConfig(
+        epochs=int(LR_HP.epochs),
+        lr=float(LR_HP.lr),
+        optimizer=OPTIMIZER,
+        adam_beta1=ADAM_BETA1,
+        adam_beta2=ADAM_BETA2,
+        adam_eps=ADAM_EPS,
+    )
+
+    mlp_cfg = TrainConfig(
         epochs=int(MLP_HP.epochs),
         lr=float(MLP_HP.lr),
+        optimizer=OPTIMIZER,
+        adam_beta1=ADAM_BETA1,
+        adam_beta2=ADAM_BETA2,
+        adam_eps=ADAM_EPS,
     )
-    mlp_cfg = TrainConfig(epochs=int(MLP_HP.epochs), lr=float(MLP_HP.lr))
-    vqc_cfg = TrainConfig(epochs=int(VQC_HP.epochs), lr=float(VQC_HP.lr))
 
-    # Compute landscapes
-    _compute_landscape(tag="linear", model_factory=linear_factory, train_cfg=linear_cfg, split=split, cfg=cfg, logger=logger)
-    _compute_landscape(tag="mlp_h4", model_factory=mlp_factory, train_cfg=mlp_cfg, split=split, cfg=cfg, logger=logger)
-    _compute_landscape(tag="vqc_L1_analytic", model_factory=vqc_factory, train_cfg=vqc_cfg, split=split, cfg=cfg, logger=logger)
+    vqc_cfg = TrainConfig(
+        epochs=int(VQC_HP.epochs),
+        lr=float(VQC_HP.lr),
+        optimizer=OPTIMIZER,
+        adam_beta1=ADAM_BETA1,
+        adam_beta2=ADAM_BETA2,
+        adam_eps=ADAM_EPS,
+    )
 
+    _compute_landscape(
+        tag="linear",
+        model_factory=linear_factory,
+        train_cfg=linear_cfg,
+        split=split,
+        cfg=cfg,
+        logger=logger,
+    )
+
+    _compute_landscape(
+        tag="mlp_h4",
+        model_factory=mlp_factory,
+        train_cfg=mlp_cfg,
+        split=split,
+        cfg=cfg,
+        logger=logger,
+    )
+
+    _compute_landscape(
+        tag="vqc_L1_analytic",
+        model_factory=vqc1_factory,
+        train_cfg=vqc_cfg,
+        split=split,
+        cfg=cfg,
+        logger=logger,
+    )
+
+    _compute_landscape(
+        tag="vqc_L2_analytic",
+        model_factory=vqc2_factory,
+        train_cfg=vqc_cfg,
+        split=split,
+        cfg=cfg,
+        logger=logger,
+    )
 
 if __name__ == "__main__":
     main()

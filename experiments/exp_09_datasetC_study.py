@@ -40,18 +40,19 @@ from experiments.settings import (
     CSV_DIR,
     FIG_DIR,
     LOG_DIR,
-    # training HPs
     LR_HP,
     MLP_HP,
     VQC_HP,
-    # VQC regimes
     VQC_LS,
     VQC_SHOTS_LIST,
-    # Dataset C params
     C_T_BENCH,
     C_N_BENCH,
     C_T_SWEEP,
     C_N_SWEEP,
+    OPTIMIZER,
+    ADAM_BETA1,
+    ADAM_BETA2,
+    ADAM_EPS,
 )
 
 # Optional integrations
@@ -271,18 +272,69 @@ def main():
     ensure_dir(CSV_DIR)
     ensure_dir(FIG_DIR)
 
-    # Smoke policy: 1 seed, tiny epochs, VQC only analytic (no shots=1024)
+    # Smoke policy: one seed and very short training horizons.
     if SMOKE:
         model_seeds = [0]
-        lr_cfg = TrainConfig(epochs=min(5, int(LR_HP.epochs)), lr=float(LR_HP.lr))
-        mlp_cfg = TrainConfig(epochs=min(5, int(MLP_HP.epochs)), lr=float(MLP_HP.lr))
-        vqc_cfg = TrainConfig(epochs=min(2, int(VQC_HP.epochs)), lr=float(VQC_HP.lr))
+
+        lr_cfg = TrainConfig(
+            epochs=min(5, int(LR_HP.epochs)),
+            lr=float(LR_HP.lr),
+            optimizer=OPTIMIZER,
+            adam_beta1=ADAM_BETA1,
+            adam_beta2=ADAM_BETA2,
+            adam_eps=ADAM_EPS,
+        )
+
+        mlp_cfg = TrainConfig(
+            epochs=min(5, int(MLP_HP.epochs)),
+            lr=float(MLP_HP.lr),
+            optimizer=OPTIMIZER,
+            adam_beta1=ADAM_BETA1,
+            adam_beta2=ADAM_BETA2,
+            adam_eps=ADAM_EPS,
+        )
+
+        vqc_cfg = TrainConfig(
+            epochs=min(2, int(VQC_HP.epochs)),
+            lr=float(VQC_HP.lr),
+            optimizer=OPTIMIZER,
+            adam_beta1=ADAM_BETA1,
+            adam_beta2=ADAM_BETA2,
+            adam_eps=ADAM_EPS,
+        )
+
         vqc_shots_list = [None]
+
     else:
         model_seeds = list(MODEL_SEEDS)
-        lr_cfg = TrainConfig(epochs=int(LR_HP.epochs), lr=float(LR_HP.lr))
-        mlp_cfg = TrainConfig(epochs=int(MLP_HP.epochs), lr=float(MLP_HP.lr))
-        vqc_cfg = TrainConfig(epochs=int(VQC_HP.epochs), lr=float(VQC_HP.lr))
+
+        lr_cfg = TrainConfig(
+            epochs=int(LR_HP.epochs),
+            lr=float(LR_HP.lr),
+            optimizer=OPTIMIZER,
+            adam_beta1=ADAM_BETA1,
+            adam_beta2=ADAM_BETA2,
+            adam_eps=ADAM_EPS,
+        )
+
+        mlp_cfg = TrainConfig(
+            epochs=int(MLP_HP.epochs),
+            lr=float(MLP_HP.lr),
+            optimizer=OPTIMIZER,
+            adam_beta1=ADAM_BETA1,
+            adam_beta2=ADAM_BETA2,
+            adam_eps=ADAM_EPS,
+        )
+
+        vqc_cfg = TrainConfig(
+            epochs=int(VQC_HP.epochs),
+            lr=float(VQC_HP.lr),
+            optimizer=OPTIMIZER,
+            adam_beta1=ADAM_BETA1,
+            adam_beta2=ADAM_BETA2,
+            adam_eps=ADAM_EPS,
+        )
+
         vqc_shots_list = list(VQC_SHOTS_LIST)
 
     # Model factories (Linear, MLP h=4, VQC L in VQC_LS, shots in vqc_shots_list)

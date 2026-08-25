@@ -10,8 +10,11 @@ from core.optim.adam import adam_init, adam_step
 
 class LogisticRegression2D(BaseBinaryClassifier):
     """
-    Linear classifier: logistic regression with 2 features + bias => 3 params.
-    Uses full-batch SGD (per epoch) for simplicity and reproducibility.
+    Logistic-regression baseline with two input features and one bias term
+    (three trainable parameters).
+
+    Training uses the optimizer and hyperparameters supplied by TrainConfig;
+    the publication protocol uses full-batch gradient descent.
     """
 
     def __init__(self, model_seed: int):

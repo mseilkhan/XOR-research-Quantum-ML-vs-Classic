@@ -1,7 +1,7 @@
 {
   "paper": {
     "title": "Comparing Classical and Quantum Variational Classifiers on the XOR Problem",
-    "scope": "Main-body figures and tables implemented in this repository (exp_01..exp_06)."
+    "scope": "Simulator experiment artifacts for exp_01 through exp_06. Artifact IDs are experiment-oriented because figure numbering changed in the revised manuscript."
   },
   "artifacts": [
     {
@@ -31,9 +31,9 @@
       ]
     },
     {
-      "id": "Fig8",
-      "paper_ref": "Figure 8",
-      "description": "Learning curves (MLP and VQC).",
+      "id": "Exp02",
+      "paper_ref": "Repository diagnostic",
+      "description": "Learning-curve diagnostics for MLP and VQC configurations.",
       "script": "python -m experiments.exp_02_learning_behavior",
       "expected_outputs": [
         "outputs/figures/lc_mlp_h4_loss.png",
@@ -47,9 +47,9 @@
       ]
     },
     {
-      "id": "Fig9ab",
-      "paper_ref": "Figure 9a, 9b",
-      "description": "Robustness vs noise sigma and vs dataset size on Dataset B.",
+      "id": "Exp03",
+      "paper_ref": "Repository diagnostic",
+      "description": "Dataset-B noise and dataset-size sweep diagnostics.",
       "script": "python -m experiments.exp_03_robustness_datasetB",
       "expected_outputs": [
         "outputs/figures/fig9*.png",
@@ -64,9 +64,9 @@
       ]
     },
     {
-      "id": "Fig9c",
-      "paper_ref": "Figure 9c",
-      "description": "VQC performance vs shots.",
+      "id": "Exp04",
+      "paper_ref": "Repository diagnostic",
+      "description": "VQC finite-shot dependence diagnostic.",
       "script": "python -m experiments.exp_04_vqc_shots_dependence",
       "expected_outputs": [
         "outputs/figures/fig9c*.png",
@@ -78,9 +78,9 @@
       ]
     },
     {
-      "id": "Fig10",
-      "paper_ref": "Figure 10",
-      "description": "Seed sensitivity experiment.",
+      "id": "Exp05",
+      "paper_ref": "Repository diagnostic",
+      "description": "Initialization-sensitivity diagnostic.",
       "script": "python -m experiments.exp_05_seed_sensitivity",
       "expected_outputs": [
         "outputs/figures/fig10*.png",
